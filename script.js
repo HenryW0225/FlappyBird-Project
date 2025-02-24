@@ -18,6 +18,7 @@ let bird = {
     velocity: 0
 };
 
+let enemy_bird = [];
 let pipes = [];
 let frame = 0;
 let gameOver = false;
@@ -27,12 +28,46 @@ function drawBird() {
     ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
 }
 
+function drawEnemyBird() {
+    ctx.fillStyle = "red";
+    for (let enemy of enemy_bird) {
+        ctx.fillRect(enemy.x, enemey.y, enemy_bird.width, enemey_bird.height);
+    }
+}
+
 function updateBird() {
     bird.velocity += bird.gravity;
     bird.y += bird.velocity;
 
     if (bird.y + bird.height > canvas.height || bird.y < 0) {
         gameOver = true;
+    }
+}
+
+function moveEnemyBird() {
+    for (let enemy of enemy_bird) {
+        enemy.x -= enemy.velocity;
+        if (bird.x + bird.width > enemy.x && bird.x + bird.width < enemy.x + enemy.width) {
+            if (bird.y > enemy.y && bird.y < enemy.y + enemy.height) {
+                gameOver = true;
+            }
+            if (bird.y + bird.height > enemy.y && bird.y + bird.height < enemy.y + enemy.height) {
+                gameOver = true;
+            }
+        }
+    }
+}
+
+function createEnemyBird() {
+    if (Math.random()%100 == 0) {
+        let height = Math.random() * (canvas.height - bird.height);
+        enemy_bird.push({
+            x: canvas.width,
+            y: height,
+            width: bird.width,
+            height: bird.height,
+            velocity: 10
+        });
     }
 }
 
@@ -83,7 +118,7 @@ function drawPipes() {
 function drawBoundaries() {
     ctx.fillStyle = "green";
     ctx.fillRect(0, 0, canvas.width, boundaries.height);
-    ctx.fillRect(0, canvas.height - boundaries.height, canvas.width, canvas.height);
+    ctx.fillRect(0, canvas.height - boundaries.height, canvas.width, boundaries.height);
     if (bird.y < boundaries.height || bird.y + bird.height > canvas.height - boundaries.width) {
         gameOver = true;
     }
@@ -104,6 +139,9 @@ function updateGame() {
     movePipes();
     drawPipes();
     drawBoundaries();
+    createEnemyBird();
+    moveEnemyBird();
+    drawEnemyBird();
 
     frame++;
     requestAnimationFrame(updateGame);
