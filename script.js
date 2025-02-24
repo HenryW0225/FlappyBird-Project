@@ -31,7 +31,7 @@ function drawBird() {
 function drawEnemyBird() {
     ctx.fillStyle = "red";
     for (let enemy of enemy_bird) {
-        ctx.fillRect(enemy.x, enemey.y, enemy_bird.width, enemey_bird.height);
+        ctx.fillRect(enemy.x, enemey.y, enemy.width, enemey.height);
     }
 }
 
@@ -59,7 +59,7 @@ function moveEnemyBird() {
 }
 
 function createEnemyBird() {
-    if (Math.random()%100 == 0) {
+    if (Math.random()%25 == 0) {
         let height = Math.random() * (canvas.height - bird.height);
         enemy_bird.push({
             x: canvas.width,
