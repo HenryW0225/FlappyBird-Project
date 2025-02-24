@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d");
 
 canvas.width = 800;
 canvas.height = 600;
+boundaries.height = 20;
 
 let bird = {
     x: 50,
@@ -76,6 +77,12 @@ function drawPipes() {
     }
 }
 
+function drawBoundaries() {
+    ctx.fillStyle = "green";
+    ctx.fillRect(0, 0, canvas.width, boundaries.height);
+    ctx.fillRect(0, canvas.height - boundaries.height, canvas.width, canvas.height);
+}
+
 function updateGame() {
     if (gameOver) {
         ctx.fillStyle = "red";
@@ -90,7 +97,8 @@ function updateGame() {
     createPipes();
     movePipes();
     drawPipes();
-    
+    drawBoundaries();
+
     frame++;
     requestAnimationFrame(updateGame);
 }
