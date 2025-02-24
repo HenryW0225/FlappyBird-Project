@@ -47,9 +47,9 @@ function createPipes() {
         });
         pipes.push({
             x: canvas.width,
-            y: height + 150,
+            y: height + 200,
             width: 50,
-            height: canvas.height - height - 150
+            height: canvas.height - height - 200
         });
     }
 }
@@ -84,6 +84,9 @@ function drawBoundaries() {
     ctx.fillStyle = "green";
     ctx.fillRect(0, 0, canvas.width, boundaries.height);
     ctx.fillRect(0, canvas.height - boundaries.height, canvas.width, canvas.height);
+    if (bird.y < boundaries.height || bird.y + bird.height > canvas.height - boundaries.width) {
+        gameOver = true;
+    }
 }
 
 function updateGame() {
