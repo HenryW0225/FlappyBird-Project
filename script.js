@@ -31,7 +31,7 @@ function drawBird() {
 function drawEnemyBird() {
     ctx.fillStyle = "red";
     for (let enemy of enemy_bird) {
-        ctx.fillRect(enemy.x, enemey.y, enemy.width, enemey.height);
+        ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
     }
 }
 
