@@ -106,13 +106,13 @@ function createPipes() {
             width: 50,
             height: canvas.height - height - 200
         });
-    }
-    if (Math.random() < 0.2) {
-        portals.push({
-            x: canvas.width,
-            width: 50,
-            height: height
-        })
+        if (Math.random() < 0.2) {
+            portals.push({
+                x: canvas.width,
+                width: 50,
+                height: height
+            })
+        }
     }
 }
 
