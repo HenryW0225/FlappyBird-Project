@@ -82,10 +82,11 @@ function drawPortals() {
 function movePortals() {
     for (let portal of portals) {
         portal.x -= 3;
-        if (bird.x > portal.x + portal.width) {
+        if (bird.x > portal.x + portal.width && portal.activation === 0) {
             bird.lift = -bird.lift;
             bird.velocity = -bird.velocity;
             bird.gravity = -bird.gravity;
+            portal.activation = 1;
         }
     }
     
@@ -110,7 +111,8 @@ function createPipes() {
             portals.push({
                 x: canvas.width,
                 width: 50,
-                height: height
+                height: height,
+                activiation: 0
             })
         }
     }
