@@ -18,6 +18,7 @@ let bird = {
     velocity: 0
 };
 
+let portals = [];
 let enemy_bird = [];
 let pipes = [];
 let frame = 0;
@@ -71,6 +72,25 @@ function createEnemyBird() {
     }
 }
 
+function drawPortals() {
+    ctx.fillStyle = "blue";
+    for (let portal of portals) {
+        ctx.fillRect(portal.x, portal.height, portal.width, 200);
+    }
+}
+
+function movePortals() {
+    for (let portal of portals) {
+        portal.x -= 3;
+        if (bird.x > portal.x + portal.width) {
+            bird.lift = -bird.lift;
+            bird.velocity = -bird.velocity;
+            bird.gravity = -bird.gravity;
+        }
+    }
+    
+}
+
 function createPipes() {
     if (frame % 100 === 0) {
         let height = Math.random() * (canvas.height / 2);
@@ -86,6 +106,13 @@ function createPipes() {
             width: 50,
             height: canvas.height - height - 200
         });
+    }
+    if (Math.random() < 0.2) {
+        portals.push({
+            x: canvas.width,
+            width: 50,
+            height: height
+        })
     }
 }
 
@@ -129,6 +156,7 @@ function updateGame() {
         ctx.fillStyle = "red";
         ctx.font = "30px Arial";
         ctx.fillText("Game Over!", 150, 300);
+        //ctx.fillText("Score: ", frame - 50/100)
         return;
     }
 
