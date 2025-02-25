@@ -84,13 +84,10 @@ function movePortals() {
         portal.x -= 3;
         if (bird.x > portal.x + portal.width && portal.activation === 0) {
             bird.lift = -bird.lift;
-            bird.velocity = -bird.velocity;
+            bird.velocity = 0;
             bird.gravity = -bird.gravity;
             portal.activation = 1;
         }
-        /*if (portal.x + portal.width < -10) {
-            portals.splice(i, 1);
-        }*/
     }
 }
 
@@ -111,9 +108,9 @@ function createPipes() {
         });
         if (Math.random() < 0.2) {
             portals.push({
-                x: canvas.width,
+                x: canvas.width + 15,
                 y: height,
-                width: 50,
+                width: 20,
                 height: 200,
                 activation: 0
             })
