@@ -170,6 +170,8 @@ function updateGame() {
     createEnemyBird();
     moveEnemyBird();
     drawEnemyBird();
+    movePortals();
+    drawPortals();
 
     frame++;
     requestAnimationFrame(updateGame);
