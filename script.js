@@ -112,7 +112,7 @@ function createPipes() {
                 x: canvas.width,
                 width: 50,
                 height: height,
-                activiation: 0
+                activation: 0
             })
         }
     }
