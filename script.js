@@ -18,7 +18,7 @@ let bird = {
     velocity: 0
 };
 
-let portals = [];
+//let portals = [];
 let enemy_bird = [];
 let pipes = [];
 let frame = 0;
@@ -72,7 +72,7 @@ function createEnemyBird() {
     }
 }
 
-function drawPortals() {
+/*function drawPortals() {
     ctx.fillStyle = "blue";
     for (let portal of portals) {
         ctx.fillRect(portal.x, portal.height, portal.width, 200);
@@ -90,7 +90,7 @@ function movePortals() {
         }
     }
     
-}
+}*/
 
 function createPipes() {
     if (frame % 100 === 0) {
@@ -107,14 +107,14 @@ function createPipes() {
             width: 50,
             height: canvas.height - height - 200
         });
-        if (Math.random() < 0.2) {
+        /*if (Math.random() < 0.2) {
             portals.push({
                 x: canvas.width,
                 width: 50,
                 height: height,
                 activation: 0
             })
-        }
+        }*/
     }
 }
 
@@ -172,8 +172,8 @@ function updateGame() {
     createEnemyBird();
     moveEnemyBird();
     drawEnemyBird();
-    movePortals();
-    drawPortals();
+    //movePortals();
+    //drawPortals();
 
     frame++;
     requestAnimationFrame(updateGame);
