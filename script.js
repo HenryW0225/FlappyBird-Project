@@ -1,7 +1,7 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 800;
+canvas.width = 900;
 canvas.height = 600;
 
 let boundaries = { 
@@ -158,7 +158,7 @@ function updateGame() {
         ctx.fillStyle = "red";
         ctx.font = "30px Arial";
         ctx.fillText("Game Over!", 150, 300);
-        //ctx.fillText("Score: ", frame - 50/100)
+        ctx.fillText(max(0, (frame - 217)/100), 150, 200);
         return;
     }
 
