@@ -88,9 +88,9 @@ function movePortals() {
             bird.gravity = -bird.gravity;
             portal.activation = 1;
         }
-        if (portal.x + portal.width < -10) {
+        /*if (portal.x + portal.width < -10) {
             portals.splice(i, 1);
-        }
+        }*/
     }
 }
 
