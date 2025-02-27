@@ -148,7 +148,7 @@ function drawBoundaries() {
     ctx.fillStyle = "green";
     ctx.fillRect(0, 0, canvas.width, boundaries.height);
     ctx.fillRect(0, canvas.height - boundaries.height, canvas.width, boundaries.height);
-    if (bird.y < boundaries.height || bird.y + bird.height > canvas.height - boundaries.width) {
+    if (bird.y < boundaries.height || bird.y + bird.height > canvas.height - boundaries.height) {
         gameOver = true;
     }
 }
@@ -158,7 +158,7 @@ function updateGame() {
         ctx.fillStyle = "red";
         ctx.font = "30px Arial";
         ctx.fillText("Game Over!", 150, 300);
-        ctx.fillText(max(0, (frame - 217)/100), 150, 200);
+        //ctx.fillText(max(0, (frame - 217)/100), 150, 200);
         return;
     }
 
@@ -174,7 +174,7 @@ function updateGame() {
     drawEnemyBird();
     movePortals();
     drawPortals();
-
+    
     frame++;
     requestAnimationFrame(updateGame);
 }
