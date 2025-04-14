@@ -160,18 +160,9 @@ function startGame() {
     ctx.fillText("Rules of the game:", 150, 250);
     ctx.fillText("Yellow square is your bird, keep your bird alive by pressing space to flap higher", 0, 200);
     ctx.fillText("Avoid red enemy birds and green columns", 50, 150);
-    ctx.fillText("press space to start");
-    document.addEventListener("keydown", function(event) {
-        if (event.code === "Space") {
-            document.removeEventListener("keydown", fucntion(event));
-            gameOver = false;
-            return;
-        }
-    });
-    while (gameOver) {
-        continue;
-    }
+    ctx.fillText("Press space to start", 150, 100);
 }
+
 
 function updateGame() {
     if (gameOver) {
@@ -179,8 +170,8 @@ function updateGame() {
         ctx.font = "30px Arial";
         ctx.fillText("Game Over!", 150, 300);
         ctx.fillText("Press space to start again", 100, 250);
-        //ctx.fillText(max(0, (frame - 217)/100), 150, 200);
         return;
+        //ctx.fillText(max(0, (frame - 217)/100), 150, 200);
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -204,33 +195,32 @@ function reset_positions() {
     bird.x = 50,
     bird.y = 250,
     bird.width = 20,
-    height = 20,
+    bird.height = 20,
     bird.gravity = 0.6,
     bird.lift = -10,
     bird.velocity = 0
     
-    
-    let portals = [];
-    let enemy_bird = [];
-    let pipes = [];
-    let frame = 0;
+    portals.length = 0;
+    enemy_bird.length = 0;
+    pipes.length = 0;
+    frame = 0;
 }
 
 document.addEventListener("keydown", function(event) {
-    if (event.code === "Space" && !gameOver) {
-        bird.velocity = bird.lift;
+    if (event.code === "Space") {
+        if (gameOver) {
+            reset_positions();
+            gameOver = false;
+            updateGame();
+        }
+        else {
+            bird.velocity = bird.lift;
+        }
     }
 });
 
 startGame();
-updateGame();
-/*while (true) {
-    updateGame();
-    document.addEventListener("keydown", function(event) {
-        if (event.code === "Space") {
-            reset_positions();
-        }
-    });
-}*/
+
+
 
 
