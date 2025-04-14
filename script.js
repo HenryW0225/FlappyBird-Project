@@ -156,7 +156,7 @@ function drawBoundaries() {
 }
 
 function startGame() {
-    ctx.fillStyle = "yellow";
+    ctx.fillStyle = "red";
     ctx.font = "30px Arial";
     ctx.fillText("Welcome to Flappy Bird!", 150, 50);
     ctx.fillText("Rules of the game:", 175, 100);
