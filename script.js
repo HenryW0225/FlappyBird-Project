@@ -21,11 +21,20 @@ let bird = {
 const birdImg = new Image();
 birdImg.src = "https://i.imgur.com/CeMECfb.png";
 
+const upsidedownbirdImg = new Image();
+upsidedownbirdImg.src = "https://i.imgur.com/H4bZZWp.png";
+
 const backgroundImg = new Image();
 backgroundImg.src = "https://i.imgur.com/rqvSLMO.png";
 
 const pipeImg = new Image();
 pipeImg.src = "https://i.imgur.com/VAsbe8D.png";
+
+const enemybirdImg = new Image();
+enemybirdImg.src = "https://i.imgur.com/eJNJ0WP.png"; 
+
+const portalImg = new Image();
+portalImg.src = "https://i.imgur.com/YHVnsUv.png";
 
 
 let portals = [];
@@ -35,13 +44,17 @@ let frame = 0;
 let gameOver = true;
 
 function drawBird() {
-    ctx.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
+    if (bird.gravity === 0.6) {
+        ctx.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
+    }
+    else {
+        ctx.drawImage(upsidedownbirdImg, bird.x, bird.y, bird.width, bird.height);
+    }
 }
 
 function drawEnemyBird() {
-    ctx.fillStyle = "red";
     for (let enemy of enemy_bird) {
-        ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+        ctx.drawImage(enemybirdImg, enemy.x, enemy.y, enemy.width, enemy.height);
     }
 }
 
@@ -82,9 +95,8 @@ function createEnemyBird() {
 }
 
 function drawPortals() {
-    ctx.fillStyle = "blue";
     for (let portal of portals) {
-        ctx.fillRect(portal.x, portal.y, portal.width, portal.height);
+        ctx.drawImage(portalImg, portal.x, portal.y, portal.width, portal.height);
     }
 }
 
@@ -185,8 +197,6 @@ function updateGame() {
     }
 
     ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
-    drawBird();
-    updateBird();
     createPipes();
     movePipes();
     drawPipes();
@@ -196,6 +206,8 @@ function updateGame() {
     drawEnemyBird();
     movePortals();
     drawPortals();
+    drawBird();
+    updateBird();
     
     frame++;
     requestAnimationFrame(updateGame);
