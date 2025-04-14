@@ -181,7 +181,7 @@ function startGame() {
     ctx.fillText("Flappy Bird is you", 175, 150);
     ctx.fillText("Press space to flap higher", 125, 200)
     ctx.fillText("Avoid enemy birds and green pipes", 75, 250);
-    ctx.fillText("Blue portals reverse gravity", 100, 300);
+    ctx.fillText("Yellow portals reverse gravity", 100, 300);
     ctx.fillText("Press space to start", 175, 350);
 }
 
