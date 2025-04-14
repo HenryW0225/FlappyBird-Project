@@ -18,6 +18,9 @@ let bird = {
     velocity: 0
 };
 
+const birdImg = new Image();
+birdImg.src = "https://i.imgur.com/CeMECfb.png";
+
 let portals = [];
 let enemy_bird = [];
 let pipes = [];
@@ -25,8 +28,7 @@ let frame = 0;
 let gameOver = true;
 
 function drawBird() {
-    ctx.fillStyle = "yellow";
-    ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
+    ctx.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
 }
 
 function drawEnemyBird() {
@@ -154,13 +156,15 @@ function drawBoundaries() {
 }
 
 function startGame() {
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "yellow";
     ctx.font = "30px Arial";
-    ctx.fillText("Welcome to Flappy Bird", 150, 300);
-    ctx.fillText("Rules of the game:", 150, 250);
-    ctx.fillText("Yellow square is your bird, keep your bird alive by pressing space to flap higher", 0, 200);
-    ctx.fillText("Avoid red enemy birds and green columns", 50, 150);
-    ctx.fillText("Press space to start", 150, 100);
+    ctx.fillText("Welcome to Flappy Bird!", 150, 50);
+    ctx.fillText("Rules of the game:", 175, 100);
+    ctx.fillText("Flappy Bird is you", 175, 150);
+    ctx.fillText("Press space to flap higher", 125, 200)
+    ctx.fillText("Avoid red enemy birds and green columns", 75, 250);
+    ctx.fillText("Blue portals reverse gravity", 100, 300);
+    ctx.fillText("Press space to start", 175, 350);
 }
 
 
@@ -168,8 +172,8 @@ function updateGame() {
     if (gameOver) {
         ctx.fillStyle = "red";
         ctx.font = "30px Arial";
-        ctx.fillText("Game Over!", 150, 300);
-        ctx.fillText("Press space to start again", 100, 250);
+        ctx.fillText("Game Over!", 150, 250);
+        ctx.fillText("Press space to start again", 75, 300);
         return;
         //ctx.fillText(max(0, (frame - 217)/100), 150, 200);
     }
