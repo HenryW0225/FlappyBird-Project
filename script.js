@@ -21,11 +21,11 @@ let bird = {
 const birdImg = new Image();
 birdImg.src = "https://i.imgur.com/CeMECfb.png";
 
-const background = new Image();
-background.src = "https://i.imgur.com/rqvSLMO.png";
+const backgroundImg = new Image();
+backgroundImg.src = "https://i.imgur.com/rqvSLMO.png";
 
-const pipe = new Image();
-pipe.src = "https://i.imgur.com/VAsbe8D.png";
+const pipeImg = new Image();
+pipeImg.src = "https://i.imgur.com/VAsbe8D.png";
 
 
 let portals = [];
@@ -147,9 +147,8 @@ function movePipes() {
 }
 
 function drawPipes() {
-    ctx.fillStyle = "green";
     for (let pipe of pipes) {
-        ctx.drawImage(pipe, pipe.x, pipe.y, pipe.width, pipe.height);
+        ctx.drawImage(pipeImg, pipe.x, pipe.y, pipe.width, pipe.height);
     }
 }
 
@@ -185,7 +184,7 @@ function updateGame() {
         //ctx.fillText(max(0, (frame - 217)/100), 150, 200);
     }
 
-    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
     drawBird();
     updateBird();
     createPipes();
