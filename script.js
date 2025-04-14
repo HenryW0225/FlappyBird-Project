@@ -22,7 +22,7 @@ let portals = [];
 let enemy_bird = [];
 let pipes = [];
 let frame = 0;
-let gameOver = false;
+let gameOver = true;
 
 function drawBird() {
     ctx.fillStyle = "yellow";
@@ -153,11 +153,32 @@ function drawBoundaries() {
     }
 }
 
+function startGame() {
+    ctx.fillStyle = "red";
+    ctx.font = "30px Arial";
+    ctx.fillText("Welcome to Flappy Bird", 150, 300);
+    ctx.fillText("Rules of the game:", 150, 250);
+    ctx.fillText("Yellow square is your bird, keep your bird alive by pressing space to flap higher", 0, 200);
+    ctx.fillText("Avoid red enemy birds and green columns", 50, 150);
+    ctx.fillText("press space to start");
+    document.addEventListener("keydown", function(event) {
+        if (event.code === "Space") {
+            document.removeEventListener("keydown", fucntion(event));
+            gameOver = false;
+            return;
+        }
+    });
+    while (gameOver) {
+        continue;
+    }
+}
+
 function updateGame() {
     if (gameOver) {
         ctx.fillStyle = "red";
         ctx.font = "30px Arial";
         ctx.fillText("Game Over!", 150, 300);
+        ctx.fillText("Press space to start again", 100, 250);
         //ctx.fillText(max(0, (frame - 217)/100), 150, 200);
         return;
     }
@@ -179,11 +200,37 @@ function updateGame() {
     requestAnimationFrame(updateGame);
 }
 
+function reset_positions() {
+    bird.x = 50,
+    bird.y = 250,
+    bird.width = 20,
+    height = 20,
+    bird.gravity = 0.6,
+    bird.lift = -10,
+    bird.velocity = 0
+    
+    
+    let portals = [];
+    let enemy_bird = [];
+    let pipes = [];
+    let frame = 0;
+}
+
 document.addEventListener("keydown", function(event) {
-    if (event.code === "Space") {
+    if (event.code === "Space" && !gameOver) {
         bird.velocity = bird.lift;
     }
 });
 
+startGame();
 updateGame();
+/*while (true) {
+    updateGame();
+    document.addEventListener("keydown", function(event) {
+        if (event.code === "Space") {
+            reset_positions();
+        }
+    });
+}*/
+
 
