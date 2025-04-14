@@ -25,7 +25,7 @@ const background = new Image();
 background.src = "https://i.imgur.com/rqvSLMO.png";
 
 const pipe = new Image();
-pipe = "https://i.imgur.com/VAsbe8D.png";
+pipe.src = "https://i.imgur.com/VAsbe8D.png";
 
 
 let portals = [];
