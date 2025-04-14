@@ -21,6 +21,9 @@ let bird = {
 const birdImg = new Image();
 birdImg.src = "https://i.imgur.com/CeMECfb.png";
 
+const background = new Image();
+background.src = "https://i.imgur.com/rqvSLMO.png";
+
 let portals = [];
 let enemy_bird = [];
 let pipes = [];
@@ -156,7 +159,7 @@ function drawBoundaries() {
 }
 
 function startGame() {
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "green";
     ctx.font = "30px Arial";
     ctx.fillText("Welcome to Flappy Bird!", 150, 50);
     ctx.fillText("Rules of the game:", 175, 100);
@@ -178,7 +181,7 @@ function updateGame() {
         //ctx.fillText(max(0, (frame - 217)/100), 150, 200);
     }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     drawBird();
     updateBird();
     createPipes();
