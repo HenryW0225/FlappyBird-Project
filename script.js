@@ -1,4 +1,5 @@
 import * as images from './images.js';
+const flapSound = new Audio('sounds/flap.wav');
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -186,7 +187,7 @@ function updateGame() {
     if (gameOver) {
         ctx.fillStyle = "red";
         ctx.font = "30px Arial";
-        ctx.drawImage(images.gameoverImg, 175, 200, 200, 75);
+        ctx.drawImage(images.gameoverImg, 75, 200, 250, 75);
         ctx.fillText("Press space to start again", 75, 350);
         preventquickstart();
         return;
@@ -244,6 +245,7 @@ document.addEventListener("keydown", function(event) {
         }
         else {
             bird.velocity = bird.lift;
+            flapSound.play();
         }
     }
 });
