@@ -82,12 +82,12 @@ function moveEnemyBird() {
 }
 
 function createEnemyBird() {
-    if (Math.random() < 0.01) {
+    if (Math.random() < 0.04 && frame%4 === 0) {
         let height = Math.random() * (canvas.height - 2*bird.height);
         enemy_bird.push({
             x: canvas.width,
             y: height,
-            width: 2*bird.width,
+            width: 4*bird.width,
             height: 2*bird.height,
             velocity: 10
         });
