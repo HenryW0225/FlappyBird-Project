@@ -1,3 +1,4 @@
+import * as images from './images.js';
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -18,25 +19,6 @@ let bird = {
     velocity: 0
 };
 
-const birdImg = new Image();
-birdImg.src = "https://i.imgur.com/CeMECfb.png";
-
-const upsidedownbirdImg = new Image();
-upsidedownbirdImg.src = "https://i.imgur.com/H4bZZWp.png";
-
-const backgroundImg = new Image();
-backgroundImg.src = "https://i.imgur.com/rqvSLMO.png";
-
-const pipeImg = new Image();
-pipeImg.src = "https://i.imgur.com/VAsbe8D.png";
-
-const enemybirdImg = new Image();
-enemybirdImg.src = "https://i.imgur.com/eJNJ0WP.png"; 
-
-const portalImg = new Image();
-portalImg.src = "https://i.imgur.com/YHVnsUv.png";
-
-
 let portals = [];
 let enemy_bird = [];
 let pipes = [];
@@ -45,16 +27,16 @@ let gameOver = true;
 
 function drawBird() {
     if (bird.gravity === 0.6) {
-        ctx.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
+        ctx.drawImage(images.birdImg, bird.x, bird.y, bird.width, bird.height);
     }
     else {
-        ctx.drawImage(upsidedownbirdImg, bird.x, bird.y, bird.width, bird.height);
+        ctx.drawImage(images.upsidedownbirdImg, bird.x, bird.y, bird.width, bird.height);
     }
 }
 
 function drawEnemyBird() {
     for (let enemy of enemy_bird) {
-        ctx.drawImage(enemybirdImg, enemy.x, enemy.y, enemy.width, enemy.height);
+        ctx.drawImage(images.enemybirdImg, enemy.x, enemy.y, enemy.width, enemy.height);
     }
 }
 
@@ -87,7 +69,7 @@ function createEnemyBird() {
         enemy_bird.push({
             x: canvas.width,
             y: height,
-            width: 4*bird.width,
+            width: 3*bird.width,
             height: 2*bird.height,
             velocity: 10
         });
@@ -96,14 +78,14 @@ function createEnemyBird() {
 
 function drawPortals() {
     for (let portal of portals) {
-        ctx.drawImage(portalImg, portal.x, portal.y, portal.width, portal.height);
+        ctx.drawImage(images.portalImg, portal.x, portal.y, portal.width, portal.height);
     }
 }
 
 function movePortals() {
     for (let portal of portals) {
         portal.x -= 3;
-        if (bird.x > portal.x + portal.width && portal.activation === 0) {
+        if (bird.x > portal.x + portal.width/2 && portal.activation === 0) {
             bird.lift = -bird.lift;
             bird.velocity = 0;
             bird.gravity = -bird.gravity;
@@ -129,9 +111,9 @@ function createPipes() {
         });
         if (Math.random() < 0.2) {
             portals.push({
-                x: canvas.width + 15,
+                x: canvas.width + 10,
                 y: height,
-                width: 20,
+                width: 30,
                 height: 200,
                 activation: 0
             })
@@ -160,14 +142,13 @@ function movePipes() {
 
 function drawPipes() {
     for (let pipe of pipes) {
-        ctx.drawImage(pipeImg, pipe.x, pipe.y, pipe.width, pipe.height);
+        ctx.drawImage(images.pipeImg, pipe.x, pipe.y, pipe.width, pipe.height);
     }
 }
 
 function drawBoundaries() {
-    ctx.fillStyle = "green";
-    ctx.fillRect(0, 0, canvas.width, boundaries.height);
-    ctx.fillRect(0, canvas.height - boundaries.height, canvas.width, boundaries.height);
+    ctx.drawImage(images.borderImg, 0, 0, canvas.width, boundaries.height);
+    ctx.drawImage(images.borderImg, 0, canvas.height - boundaries.height, canvas.width, boundaries.height);
     if (bird.y < boundaries.height || bird.y + bird.height > canvas.height - boundaries.height) {
         gameOver = true;
     }
@@ -196,7 +177,7 @@ function updateGame() {
         //ctx.fillText(max(0, (frame - 217)/100), 150, 200);
     }
 
-    ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(images.backgroundImg, 0, 0, canvas.width, canvas.height);
     createPipes();
     movePipes();
     drawPipes();
