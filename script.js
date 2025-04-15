@@ -234,10 +234,10 @@ function reset_positions() {
 document.addEventListener("keydown", function(event) {
     if (event.code === "Space") {
         if (gameOver) {
-            if (canstartGame) {
+            if (canStartGame) {
                 reset_positions();
                 gameOver = false;
-                canstartGame = false;
+                canStartGame = false;
                 updateGame();
             }
         }
