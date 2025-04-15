@@ -186,8 +186,8 @@ function updateGame() {
     if (gameOver) {
         ctx.fillStyle = "red";
         ctx.font = "30px Arial";
-        ctx.drawImage(images.gameoverImg, 150, 250, 100, 50);
-        ctx.fillText("Press space to start again", 75, 300);
+        ctx.drawImage(images.gameoverImg, 175, 200, 200, 75);
+        ctx.fillText("Press space to start again", 75, 350);
         preventquickstart();
         return;
     }
@@ -227,6 +227,7 @@ function reset_positions() {
     enemy_bird.length = 0;
     pipes.length = 0;
     frame = 0;
+    score = 0;
 }
 
 
