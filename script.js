@@ -252,6 +252,7 @@ function reset_positions() {
 
 function backgroundMusic() {
     backgroundSound.loop = true;
+    backgroundSound.volume = 0.4;
     backgroundSound.play();
 }
 
@@ -269,8 +270,8 @@ document.addEventListener("keydown", function(event) {
         }
         else {
             bird.velocity = bird.lift;
-            flapSound.pause();
-            flapSound.currentTime = 0;
+            //flapSound.pause();
+            //flapSound.currentTime = 0;
             flapSound.play();
         }
     }
