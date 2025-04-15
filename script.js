@@ -24,6 +24,8 @@ let enemy_bird = [];
 let pipes = [];
 let frame = 0;
 let gameOver = true;
+let canStartGame = false;
+let score = 0;
 
 function drawBird() {
     if (bird.gravity === 0.6) {
@@ -52,6 +54,9 @@ function updateBird() {
 function moveEnemyBird() {
     for (let enemy of enemy_bird) {
         enemy.x -= enemy.velocity;
+        if (enemy.x + enemy.width < 0) {
+            enemy_bird.shift();
+        }
         if (bird.x + bird.width > enemy.x && bird.x + bird.width < enemy.x + enemy.width) {
             if (bird.y > enemy.y && bird.y < enemy.y + enemy.height) {
                 gameOver = true;
@@ -85,6 +90,9 @@ function drawPortals() {
 function movePortals() {
     for (let portal of portals) {
         portal.x -= 3;
+        if (portal.x + portal.width < 0) {
+            portals.shift();
+        }
         if (bird.x > portal.x + portal.width/2 && portal.activation === 0) {
             bird.lift = -bird.lift;
             bird.velocity = 0;
@@ -154,6 +162,12 @@ function drawBoundaries() {
     }
 }
 
+function preventquickstart() {
+    setTimeout(() => {
+        canStartGame = true;
+    }, 1000);
+}
+
 function startGame() {
     ctx.fillStyle = "green";
     ctx.font = "30px Arial";
@@ -164,6 +178,7 @@ function startGame() {
     ctx.fillText("Avoid enemy birds and green pipes", 75, 250);
     ctx.fillText("Yellow portals reverse gravity", 100, 300);
     ctx.fillText("Press space to start", 175, 350);
+    preventquickstart();
 }
 
 
@@ -171,9 +186,9 @@ function updateGame() {
     if (gameOver) {
         ctx.fillStyle = "red";
         ctx.font = "30px Arial";
-        ctx.drawImage(images.gameoverImg, 150, 250, 250, 300);
-        //ctx.fillText("Game Over!", 150, 250);
+        ctx.drawImage(images.gameoverImg, 150, 250, 100, 50);
         ctx.fillText("Press space to start again", 75, 300);
+        preventquickstart();
         return;
     }
 
@@ -189,8 +204,13 @@ function updateGame() {
     drawPortals();
     drawBird();
     updateBird();
-    
+
     frame++;
+    score = Math.max(0, Math.floor((frame - 200) / 100));
+    ctx.fillStyle = "black";
+    ctx.font = "30px Arial";
+    ctx.fillText("Score: " + score, 20, 20);
+
     requestAnimationFrame(updateGame);
 }
 
@@ -209,12 +229,17 @@ function reset_positions() {
     frame = 0;
 }
 
+
+
 document.addEventListener("keydown", function(event) {
     if (event.code === "Space") {
         if (gameOver) {
-            reset_positions();
-            gameOver = false;
-            updateGame();
+            if (canstartGame) {
+                reset_positions();
+                gameOver = false;
+                canstartGame = false;
+                updateGame();
+            }
         }
         else {
             bird.velocity = bird.lift;
