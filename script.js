@@ -171,10 +171,10 @@ function updateGame() {
     if (gameOver) {
         ctx.fillStyle = "red";
         ctx.font = "30px Arial";
-        ctx.fillText("Game Over!", 150, 250);
+        ctx.drawImage(images.gameoverImg, 150, 250, 250, 300);
+        //ctx.fillText("Game Over!", 150, 250);
         ctx.fillText("Press space to start again", 75, 300);
         return;
-        //ctx.fillText(max(0, (frame - 217)/100), 150, 200);
     }
 
     ctx.drawImage(images.backgroundImg, 0, 0, canvas.width, canvas.height);
