@@ -1,5 +1,8 @@
 import * as images from './images.js';
 const flapSound = new Audio('sounds/flap.wav');
+const backgroundSound = new Audio('sounds/background.wav');
+const collisionSound = new Audio('sounds/collision.wav');
+const portalSound = new Audio('sounds/portal.wav');
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -94,7 +97,11 @@ function movePortals() {
         if (portal.x + portal.width < 0) {
             portals.shift();
         }
-        if (bird.x > portal.x + portal.width/2 && portal.activation === 0) {
+        if (bird.x + bird.width > portal.x && portal.sound === 0) {
+            portalSound.play();
+            portal.sound = 1;
+        }
+        if (bird.x + bird.width/2 > portal.x + portal.width/2 && portal.activation === 0) {
             bird.lift = -bird.lift;
             bird.velocity = 0;
             bird.gravity = -bird.gravity;
@@ -124,7 +131,8 @@ function createPipes() {
                 y: height,
                 width: 30,
                 height: 200,
-                activation: 0
+                activation: 0,
+                sound: 0
             })
         }
     }
@@ -182,9 +190,20 @@ function startGame() {
     preventquickstart();
 }
 
+function ending_sounds() {
+    portalSound.pause();
+    portalSound.currentTime = 0;
+    flapSound.pause();
+    flapSound.currentTime = 0;
+    backgroundSound.pause();
+    backgroundSound.currentTime = 0;
+}
+
 
 function updateGame() {
     if (gameOver) {
+        ending_sounds();
+        collisionSound.play();
         ctx.fillStyle = "red";
         ctx.font = "30px Arial";
         ctx.drawImage(images.gameoverImg, 75, 200, 250, 75);
@@ -231,6 +250,10 @@ function reset_positions() {
     score = 0;
 }
 
+function backgroundMusic() {
+    backgroundSound.loop = true;
+    backgroundSound.play();
+}
 
 
 document.addEventListener("keydown", function(event) {
@@ -240,11 +263,14 @@ document.addEventListener("keydown", function(event) {
                 reset_positions();
                 gameOver = false;
                 canStartGame = false;
+                backgroundMusic();
                 updateGame();
             }
         }
         else {
             bird.velocity = bird.lift;
+            flapSound.pause();
+            flapSound.currentTime = 0;
             flapSound.play();
         }
     }
