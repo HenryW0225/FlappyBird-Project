@@ -16,8 +16,8 @@ let boundaries = {
 let bird = {
     x: 50,
     y: 250,
-    width: 20,
-    height: 20,
+    width: 40,
+    height: 40,
     gravity: 0.6,
     lift: -10,
     velocity: 0
@@ -252,7 +252,7 @@ function reset_positions() {
 
 function backgroundMusic() {
     backgroundSound.loop = true;
-    backgroundSound.volume = 0.4;
+    backgroundSound.volume = 0.2;
     backgroundSound.play();
 }
 
