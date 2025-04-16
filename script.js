@@ -24,12 +24,89 @@ let bird = {
 };
 
 let portals = [];
+
 let enemy_bird = [];
+
 let pipes = [];
+
+let walls = [];
+
 let frame = 0;
 let gameOver = true;
 let canStartGame = false;
 let score = 0;
+
+function createObstacles() {
+    if (frame % 100 === 0) {
+        if (Math.random() < 0.15) {
+            let height = 4 * Math.floor(Math.random() * (canvas.height / 6));
+            let direction = Math.random() < 0.5 ? 1 : -1;
+            walls.push({
+                x: canvas.width,
+                y: height,
+                width: 50,
+                height: 200,
+                trajectory: direction
+            })
+        }
+        else {
+            let height = Math.random() * (canvas.height / 2);
+            pipes.push({
+                x: canvas.width,
+                y: 0,
+                width: 50,
+                height: height
+            });
+            pipes.push({
+                x: canvas.width,
+                y: height + 200,
+                width: 50,
+                height: canvas.height - height - 200
+            });
+            if (Math.random() < 0.2) {
+                portals.push({
+                    x: canvas.width + 10,
+                    y: height,
+                    width: 30,
+                    height: 200,
+                    activation: 0,
+                    sound: 0
+                })
+            }
+        }
+    }
+}
+
+
+function moveWalls() {
+    for (let wall of walls) {
+        if (wall.x + wall.width < 0) {
+            walls.shift();
+        }
+        if (wall.y === 0) {
+            wall.trajectory = 1;
+        }
+        if (wall.y + wall.height == 600) {
+            wall.trajectory = -1;
+        }
+        wall.x -= 3;
+        wall.y += 4 * wall.trajectory;
+        if (bird.x + bird.width > wall.x && bird.x < wall.x + wall.width) {
+            if (bird.y > wall.y && bird.y < wall.y + wall.height) {
+                gameOver = true;
+            }
+            if (bird.y + bird.height > wall.y && bird.y + bird.height < wall.y + wall.height) {
+                gameOver = true;
+            }
+        }
+    }
+}
+
+function drawWalls() {
+    for (let wall of walls) {
+        ctx.drawImage(images.pipeImg, wall.x, wall.y, wall.width, wall.height);
+    }
+}
 
 function drawBird() {
     if (bird.gravity === 0.6) {
@@ -61,7 +138,7 @@ function moveEnemyBird() {
         if (enemy.x + enemy.width < 0) {
             enemy_bird.shift();
         }
-        if (bird.x + bird.width > enemy.x && bird.x + bird.width < enemy.x + enemy.width) {
+        if (bird.x + bird.width > enemy.x && bird.x < enemy.x + enemy.width) {
             if (bird.y > enemy.y && bird.y < enemy.y + enemy.height) {
                 gameOver = true;
             }
@@ -110,33 +187,6 @@ function movePortals() {
     }
 }
 
-function createPipes() {
-    if (frame % 100 === 0) {
-        let height = Math.random() * (canvas.height / 2);
-        pipes.push({
-            x: canvas.width,
-            y: 0,
-            width: 50,
-            height: height
-        });
-        pipes.push({
-            x: canvas.width,
-            y: height + 200,
-            width: 50,
-            height: canvas.height - height - 200
-        });
-        if (Math.random() < 0.2) {
-            portals.push({
-                x: canvas.width + 10,
-                y: height,
-                width: 30,
-                height: 200,
-                activation: 0,
-                sound: 0
-            })
-        }
-    }
-}
 
 function movePipes() {
     for (let pipe of pipes) {
@@ -213,10 +263,12 @@ function updateGame() {
     }
 
     ctx.drawImage(images.backgroundImg, 0, 0, canvas.width, canvas.height);
-    createPipes();
+    createObstacles();
+    drawBoundaries();
     movePipes();
     drawPipes();
-    drawBoundaries();
+    moveWalls();
+    drawWalls();
     createEnemyBird();
     moveEnemyBird();
     drawEnemyBird();
@@ -237,8 +289,8 @@ function updateGame() {
 function reset_positions() {
     bird.x = 50,
     bird.y = 250,
-    bird.width = 20,
-    bird.height = 20,
+    bird.width = 40,
+    bird.height = 40,
     bird.gravity = 0.6,
     bird.lift = -10,
     bird.velocity = 0
