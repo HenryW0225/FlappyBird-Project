@@ -258,7 +258,7 @@ function death_scene() {
         drawPortals();
         drawEnemyBird();
 
-        bird.y += bird.gravity * 20;
+        bird.y += bird.gravity * 30;
         if (bird.y < boundaries.height) {
             bird.y = boundaries.height;
             drawBird();
@@ -364,8 +364,6 @@ document.addEventListener("keydown", function(event) {
         }
         else {
             bird.velocity = bird.lift;
-            //flapSound.pause();
-            //flapSound.currentTime = 0;
             playSound(flapSound);
         }
     }
