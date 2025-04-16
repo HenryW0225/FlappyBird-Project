@@ -258,20 +258,24 @@ function death_scene() {
         drawPortals();
         drawEnemyBird();
 
-        bird.y += bird.gravity * 5;
+        bird.y += bird.gravity * 20;
+        if (bird.y < boundaries.height) {
+            bird.y = boundaries.height;
+            return;
+        }
+        if (bird.y + bird.height > canvas.height - boundaries.height) {
+            bird.y = canvas.height - boundaries.height - bird.height;
+            return;
+        }
         drawBird();
         ctx.fillStyle = "red";
         ctx.font = "30px Arial";
         ctx.drawImage(images.gameoverImg, 75, 200, 250, 75);
         ctx.fillText("Press space to start again", 75, 350);
 
-        if (
-            bird.y > boundaries.height &&
-            bird.y + bird.height < canvas.height - boundaries.height
-        ) {
-            requestAnimationFrame(fall);
-        }
+        requestAnimationFrame(fall);
     }
+    
     fall();
 }
 
