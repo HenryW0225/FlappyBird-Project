@@ -260,6 +260,10 @@ function death_scene() {
 
         bird.y += bird.gravity * 5;
         drawBird();
+        ctx.fillStyle = "red";
+        ctx.font = "30px Arial";
+        ctx.drawImage(images.gameoverImg, 75, 200, 250, 75);
+        ctx.fillText("Press space to start again", 75, 350);
 
         if (
             bird.y > boundaries.height &&
@@ -277,10 +281,6 @@ function updateGame() {
         ending_sounds();
         collisionSound.play();
         death_scene();
-        ctx.fillStyle = "red";
-        ctx.font = "30px Arial";
-        ctx.drawImage(images.gameoverImg, 75, 200, 250, 75);
-        ctx.fillText("Press space to start again", 75, 350);
         preventquickstart();
         return;
     }
