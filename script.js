@@ -150,7 +150,7 @@ function moveEnemyBird() {
 }
 
 function createEnemyBird() {
-    if (Math.random() < 0.04 && frame%4 === 0) {
+    if (Math.random() < 0.04 && frame%4 === 0 && enemy_bird.length < 4) {
         let height = Math.random() * (canvas.height - 2*bird.height);
         enemy_bird.push({
             x: canvas.width,
@@ -305,7 +305,7 @@ function reset_positions() {
 
 function backgroundMusic() {
     backgroundSound.loop = true;
-    backgroundSound.volume = 0.01;
+    backgroundSound.volume = 0.1;
     backgroundSound.play();
 }
 
