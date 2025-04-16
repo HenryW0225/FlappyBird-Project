@@ -249,11 +249,34 @@ function ending_sounds() {
     backgroundSound.currentTime = 0;
 }
 
+function death_scene() {
+    function fall() {
+        ctx.drawImage(images.backgroundImg, 0, 0, canvas.width, canvas.height);
+        drawBoundaries();
+        drawPipes();
+        drawWalls();
+        drawPortals();
+        drawEnemyBird();
+
+        bird.y += bird.gravity * 5;
+        drawBird();
+
+        if (
+            bird.y > boundaries.height &&
+            bird.y + bird.height < canvas.height - boundaries.height
+        ) {
+            requestAnimationFrame(fall);
+        }
+    }
+    fall();
+}
+
 
 function updateGame() {
     if (gameOver) {
         ending_sounds();
         collisionSound.play();
+        death_scene();
         ctx.fillStyle = "red";
         ctx.font = "30px Arial";
         ctx.drawImage(images.gameoverImg, 75, 200, 250, 75);
