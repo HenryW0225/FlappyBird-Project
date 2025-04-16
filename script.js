@@ -150,7 +150,7 @@ function moveEnemyBird() {
 }
 
 function createEnemyBird() {
-    if (Math.random() < 0.04 && frame%4 === 0 && enemy_bird.length < 4) {
+    if (Math.random() < 0.06 && frame%4 === 0 && enemy_bird.length < 2) {
         let height = Math.random() * (canvas.height - 2*bird.height);
         enemy_bird.push({
             x: canvas.width,
@@ -305,10 +305,14 @@ function reset_positions() {
 
 function backgroundMusic() {
     backgroundSound.loop = true;
-    backgroundSound.volume = 0.1;
+    backgroundSound.volume = 0.05;
     backgroundSound.play();
 }
 
+function playSound(audio) {
+    const clone = audio.cloneNode();
+    clone.play();
+}
 
 document.addEventListener("keydown", function(event) {
     if (event.code === "Space") {
@@ -325,7 +329,7 @@ document.addEventListener("keydown", function(event) {
             bird.velocity = bird.lift;
             //flapSound.pause();
             //flapSound.currentTime = 0;
-            flapSound.play();
+            playSound(flapSound);
         }
     }
 });
