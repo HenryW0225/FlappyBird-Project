@@ -16,8 +16,8 @@ let boundaries = {
 let bird = {
     x: 50,
     y: 250,
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     gravity: 0.6,
     lift: -10,
     velocity: 0
@@ -289,8 +289,8 @@ function updateGame() {
 function reset_positions() {
     bird.x = 50,
     bird.y = 250,
-    bird.width = 40,
-    bird.height = 40,
+    bird.width = 30,
+    bird.height = 30,
     bird.gravity = 0.6,
     bird.lift = -10,
     bird.velocity = 0
@@ -298,13 +298,14 @@ function reset_positions() {
     portals.length = 0;
     enemy_bird.length = 0;
     pipes.length = 0;
+    walls.length = 0;
     frame = 0;
     score = 0;
 }
 
 function backgroundMusic() {
     backgroundSound.loop = true;
-    backgroundSound.volume = 0.2;
+    backgroundSound.volume = 0.01;
     backgroundSound.play();
 }
 
