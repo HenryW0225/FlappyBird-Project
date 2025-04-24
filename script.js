@@ -264,8 +264,8 @@ function death_scene() {
         ctx.fillStyle = "black";
         ctx.font = "30px Arial";
         ctx.fillText("Score: " + score, 20, 20);
-        ctx.fillText(playerName, 400, 20);
-        ctx.fillText("High Score: " + high_score, 750, 20);
+        ctx.fillText(playerName, 350, 20);
+        ctx.fillText("High Score: " + high_score, 650, 20);
 
         bird.y += bird.gravity * 30;
         if (bird.y < boundaries.height) {
@@ -339,11 +339,11 @@ function updateGame() {
     ctx.fillStyle = "black";
     ctx.font = "30px Arial";
     ctx.fillText("Score: " + score, 20, 20);
-    ctx.fillText(playerName, 400, 20);
+    ctx.fillText(playerName, 350, 20);
     if (high_score < score) {
         high_score = score;
     }
-    ctx.fillText("High Score: " + high_score, 750, 20);
+    ctx.fillText("High Score: " + high_score, 650, 20);
     requestAnimationFrame(updateGame);
 }
 
