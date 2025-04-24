@@ -377,8 +377,8 @@ function playSound(audio) {
 
 document.addEventListener("keydown", function(event) {
     if (event.code === "Space") {
-        if (gameOver && playerName != "") {
-            if (canStartGame) {
+        if (gameOver) {
+            if (canStartGame && playerName != "") {
                 reset_positions();
                 gameOver = false;
                 canStartGame = false;
