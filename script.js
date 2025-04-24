@@ -38,6 +38,7 @@ let frame = 0;
 let gameOver = true;
 let canStartGame = false;
 let score = 0;
+let high_score = 0;
 
 function createObstacles() {
     if (frame % 100 === 0) {
@@ -260,6 +261,11 @@ function death_scene() {
         drawWalls();
         drawPortals();
         drawEnemyBird();
+        ctx.fillStyle = "black";
+        ctx.font = "30px Arial";
+        ctx.fillText("Score: " + score, 20, 20);
+        ctx.fillText(playerName, 400, 20);
+        ctx.fillText("High Score: " + high_score, 750, 20);
 
         bird.y += bird.gravity * 30;
         if (bird.y < boundaries.height) {
@@ -333,7 +339,11 @@ function updateGame() {
     ctx.fillStyle = "black";
     ctx.font = "30px Arial";
     ctx.fillText("Score: " + score, 20, 20);
-
+    ctx.fillText(playerName, 400, 20);
+    if (high_score < score) {
+        high_score = score;
+    }
+    ctx.fillText("High Score: " + high_score, 750, 20);
     requestAnimationFrame(updateGame);
 }
 
