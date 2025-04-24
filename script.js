@@ -5,6 +5,9 @@ const collisionSound = new Audio('sounds/collision.wav');
 const portalSound = new Audio('sounds/portal.wav');
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const startBtn = document.getElementById("startBtn");
+const usernameInput = document.getElementById("usernameInput");
+let playerName = "";
 
 canvas.width = 900;
 canvas.height = 600;
@@ -289,6 +292,17 @@ function death_scene() {
     fall();
 }
 
+startBtn.addEventListener("click", () => {
+    const name = usernameInput.value.trim();
+    if (name !== "") {
+        playerName = name;
+        document.getElementById("startMenu").style.display = "none";
+        startGame();
+    } else {
+        alert("Please enter a username");
+    }
+});
+
 
 function updateGame() {
     if (gameOver) {
@@ -353,7 +367,7 @@ function playSound(audio) {
 
 document.addEventListener("keydown", function(event) {
     if (event.code === "Space") {
-        if (gameOver) {
+        if (gameOver && playerName != "") {
             if (canStartGame) {
                 reset_positions();
                 gameOver = false;
