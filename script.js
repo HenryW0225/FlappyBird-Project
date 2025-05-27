@@ -1,3 +1,8 @@
+//Notes:
+//high score; backend database (later), local server for faster testing, different levels and settings (getting user feedback), more obstacles, death scene, fix death_scene, add is_colliding function, calculate enemy bird spawns so passing through specific pipes aren't impossible
+
+
+
 import * as images from './images.js';
 const flapSound = new Audio('sounds/flap.wav');
 const backgroundSound = new Audio('sounds/background.wav');
