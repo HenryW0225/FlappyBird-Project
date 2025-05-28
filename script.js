@@ -1,21 +1,23 @@
-//Notes:
-//high score; backend database (later), local server for faster testing, different levels and settings (getting user feedback), more obstacles, death scene, fix death_scene, add is_colliding function, calculate enemy bird spawns so passing through specific pipes aren't impossible
-
-
-
-import * as images from './images.js';
-const flapSound = new Audio('sounds/flap.wav');
-const backgroundSound = new Audio('sounds/background.wav');
-const collisionSound = new Audio('sounds/collision.wav');
-const portalSound = new Audio('sounds/portal.wav');
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const startBtn = document.getElementById("startBtn");
 const usernameInput = document.getElementById("usernameInput");
 let playerName = "";
 
+import * as images from './images.js';
+const flapSound = new Audio('sounds/flap.wav');
+const backgroundSound = new Audio('sounds/background.wav');
+const collisionSound = new Audio('sounds/collision.wav');
+const portalSound = new Audio('sounds/portal.wav');
+
 canvas.width = 900;
 canvas.height = 600;
+
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+ctx.fillStyle = "black";
+ctx.font = "30px Arial";
+
 
 let boundaries = { 
     height: 20 
@@ -44,6 +46,15 @@ let gameOver = true;
 let canStartGame = false;
 let score = 0;
 let high_score = 0;
+
+function isContacting(a, b) {
+    return (
+        a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y
+    );
+}
 
 function createObstacles() {
     if (frame % 100 === 0) {
@@ -89,9 +100,6 @@ function createObstacles() {
 
 function moveWalls() {
     for (let wall of walls) {
-        if (wall.x + wall.width < 0) {
-            walls.shift();
-        }
         if (wall.y === 0) {
             wall.trajectory = 1;
         }
@@ -100,13 +108,13 @@ function moveWalls() {
         }
         wall.x -= 3;
         wall.y += 4 * wall.trajectory;
-        if (bird.x + bird.width > wall.x && bird.x < wall.x + wall.width) {
-            if (bird.y > wall.y && bird.y < wall.y + wall.height) {
-                gameOver = true;
-            }
-            if (bird.y + bird.height > wall.y && bird.y + bird.height < wall.y + wall.height) {
-                gameOver = true;
-            }
+
+        if (isContacting(bird, wall)) {
+            gameOver = true;
+        }
+
+        if (wall.x + wall.width < 0) {
+            walls.shift();
         }
     }
 }
@@ -117,44 +125,65 @@ function drawWalls() {
     }
 }
 
-function drawBird() {
-    if (bird.gravity === 0.6) {
-        ctx.drawImage(images.birdImg, bird.x, bird.y, bird.width, bird.height);
-    }
-    else {
-        ctx.drawImage(images.upsidedownbirdImg, bird.x, bird.y, bird.width, bird.height);
+function movePipes() {
+    for (let pipe of pipes) {
+        pipe.x -= 3;
+
+        if (isContacting(bird, pipe)) {
+            gameOver = true;
+        }
+
+        if (pipe.x + pipe.width < 0) {
+            pipes.shift();
+        }
     }
 }
 
-function drawEnemyBird() {
-    for (let enemy of enemy_bird) {
-        ctx.drawImage(images.enemybirdImg, enemy.x, enemy.y, enemy.width, enemy.height);
+function drawPipes() {
+    for (let pipe of pipes) {
+        ctx.drawImage(images.pipeImg, pipe.x, pipe.y, pipe.width, pipe.height);
+    }
+}
+
+function movePortals() {
+    for (let portal of portals) {
+        portal.x -= 3;
+
+        if (bird.x + bird.width > portal.x && portal.sound === 0) {
+            portalSound.play();
+            portal.sound = 1;
+        }
+
+        if (bird.x + bird.width/2 > portal.x + portal.width/2 && portal.activation === 0) {
+            bird.lift = -bird.lift;
+            bird.velocity = 0;
+            bird.gravity = -bird.gravity;
+            portal.activation = 1;
+        }
+
+        if (portal.x + portal.width < 0) {
+            portals.shift();
+        }
+    }
+}
+
+function drawPortals() {
+    for (let portal of portals) {
+        ctx.drawImage(images.portalImg, portal.x, portal.y, portal.width, portal.height);
     }
 }
 
 function updateBird() {
     bird.velocity += bird.gravity;
     bird.y += bird.velocity;
+} 
 
-    if (bird.y + bird.height > canvas.height || bird.y < 0) {
-        gameOver = true;
+function drawBird() {
+    if (bird.gravity === 0.6) {
+        ctx.drawImage(images.birdImg, bird.x, bird.y, bird.width, bird.height);
     }
-}
-
-function moveEnemyBird() {
-    for (let enemy of enemy_bird) {
-        enemy.x -= enemy.velocity;
-        if (enemy.x + enemy.width < 0) {
-            enemy_bird.shift();
-        }
-        if (bird.x + bird.width > enemy.x && bird.x < enemy.x + enemy.width) {
-            if (bird.y > enemy.y && bird.y < enemy.y + enemy.height) {
-                gameOver = true;
-            }
-            if (bird.y + bird.height > enemy.y && bird.y + bird.height < enemy.y + enemy.height) {
-                gameOver = true;
-            }
-        }
+    else {
+        ctx.drawImage(images.upsidedownbirdImg, bird.x, bird.y, bird.width, bird.height);
     }
 }
 
@@ -171,54 +200,23 @@ function createEnemyBird() {
     }
 }
 
-function drawPortals() {
-    for (let portal of portals) {
-        ctx.drawImage(images.portalImg, portal.x, portal.y, portal.width, portal.height);
-    }
-}
+function moveEnemyBird() {
+    for (let enemy of enemy_bird) {
+        enemy.x -= enemy.velocity;
 
-function movePortals() {
-    for (let portal of portals) {
-        portal.x -= 3;
-        if (portal.x + portal.width < 0) {
-            portals.shift();
-        }
-        if (bird.x + bird.width > portal.x && portal.sound === 0) {
-            portalSound.play();
-            portal.sound = 1;
-        }
-        if (bird.x + bird.width/2 > portal.x + portal.width/2 && portal.activation === 0) {
-            bird.lift = -bird.lift;
-            bird.velocity = 0;
-            bird.gravity = -bird.gravity;
-            portal.activation = 1;
-        }
-    }
-}
-
-
-function movePipes() {
-    for (let pipe of pipes) {
-        pipe.x -= 3;
-
-        if (pipe.x + pipe.width < 0) {
-            pipes.shift();
-        }
-
-        if (
-            bird.x < pipe.x + pipe.width &&
-            bird.x + bird.width > pipe.x &&
-            bird.y < pipe.y + pipe.height &&
-            bird.y + bird.height > pipe.y
-        ) {
+        if (isContacting(bird, enemy)) {
             gameOver = true;
         }
+
+        if (enemy.x + enemy.width < 0) {
+            enemy_bird.shift();
+        }
     }
 }
 
-function drawPipes() {
-    for (let pipe of pipes) {
-        ctx.drawImage(images.pipeImg, pipe.x, pipe.y, pipe.width, pipe.height);
+function drawEnemyBird() {
+    for (let enemy of enemy_bird) {
+        ctx.drawImage(images.enemybirdImg, enemy.x, enemy.y, enemy.width, enemy.height);
     }
 }
 
@@ -236,19 +234,6 @@ function preventquickstart() {
     }, 1000);
 }
 
-function startGame() {
-    ctx.fillStyle = "green";
-    ctx.font = "30px Arial";
-    ctx.fillText("Welcome to Flappy Bird!", 150, 50);
-    ctx.fillText("Rules of the game:", 175, 100);
-    ctx.fillText("Flappy Bird is you", 175, 150);
-    ctx.fillText("Press space to flap higher", 125, 200)
-    ctx.fillText("Avoid enemy birds and green pipes", 75, 250);
-    ctx.fillText("Yellow portals reverse gravity", 100, 300);
-    ctx.fillText("Press space to start", 175, 350);
-    preventquickstart();
-}
-
 function ending_sounds() {
     portalSound.pause();
     portalSound.currentTime = 0;
@@ -260,96 +245,33 @@ function ending_sounds() {
 
 function death_scene() {
     function fall() {
+        bird.y += bird.gravity * 30;
+        if (bird.y < boundaries.height) {
+            bird.y = boundaries.height;
+        }
+        if (bird.y + bird.height > canvas.height - boundaries.height) {
+            bird.y = canvas.height - boundaries.height - bird.height;
+        }
+
         ctx.drawImage(images.backgroundImg, 0, 0, canvas.width, canvas.height);
         drawBoundaries();
         drawPipes();
         drawWalls();
         drawPortals();
         drawEnemyBird();
-        ctx.fillStyle = "black";
-        ctx.font = "30px Arial";
-        ctx.fillText("Score: " + score, 20, 20);
-        ctx.fillText(playerName, 350, 20);
-        ctx.fillText("High Score: " + high_score, 650, 20);
 
-        bird.y += bird.gravity * 30;
-        if (bird.y < boundaries.height) {
-            bird.y = boundaries.height;
-            drawBird();
-            ctx.fillStyle = "red";
-            ctx.font = "30px Arial";
-            ctx.drawImage(images.gameoverImg, 75, 200, 250, 75);
-            ctx.fillText("Press space to start again", 75, 350);
+        ctx.fillText("Score: " + score, 150, 25);
+        ctx.fillText(playerName, 450, 25);
+        ctx.fillText("High Score: " + high_score, 750, 25);
+
+        if (bird.y === boundaries.height || bird.y + bird.height === canvas.height - boundaries.height) {
             return;
         }
-        if (bird.y + bird.height > canvas.height - boundaries.height) {
-            bird.y = canvas.height - boundaries.height - bird.height;
-            drawBird();
-            ctx.fillStyle = "red";
-            ctx.font = "30px Arial";
-            ctx.drawImage(images.gameoverImg, 75, 200, 250, 75);
-            ctx.fillText("Press space to start again", 75, 350);
-            return;
-        }
-        drawBird();
-        ctx.fillStyle = "red";
-        ctx.font = "30px Arial";
-        ctx.drawImage(images.gameoverImg, 75, 200, 250, 75);
-        ctx.fillText("Press space to start again", 75, 350);
 
         requestAnimationFrame(fall);
     }
 
     fall();
-}
-
-startBtn.addEventListener("click", () => {
-    const name = usernameInput.value.trim();
-    if (name !== "") {
-        playerName = name;
-        document.getElementById("startMenu").style.display = "none";
-        startGame();
-    } else {
-        alert("Please enter a username");
-    }
-});
-
-
-function updateGame() {
-    if (gameOver) {
-        ending_sounds();
-        collisionSound.play();
-        death_scene();
-        preventquickstart();
-        return;
-    }
-
-    ctx.drawImage(images.backgroundImg, 0, 0, canvas.width, canvas.height);
-    createObstacles();
-    drawBoundaries();
-    movePipes();
-    drawPipes();
-    moveWalls();
-    drawWalls();
-    createEnemyBird();
-    moveEnemyBird();
-    drawEnemyBird();
-    movePortals();
-    drawPortals();
-    drawBird();
-    updateBird();
-
-    frame++;
-    score = Math.max(0, Math.floor((frame - 200) / 100));
-    ctx.fillStyle = "black";
-    ctx.font = "30px Arial";
-    ctx.fillText("Score: " + score, 20, 20);
-    ctx.fillText(playerName, 350, 20);
-    if (high_score < score) {
-        high_score = score;
-    }
-    ctx.fillText("High Score: " + high_score, 650, 20);
-    requestAnimationFrame(updateGame);
 }
 
 function reset_positions() {
@@ -378,6 +300,63 @@ function backgroundMusic() {
 function playSound(audio) {
     const clone = audio.cloneNode();
     clone.play();
+}
+
+function startGame() {
+    ctx.fillText("Welcome to Flappy Bird!", 450, 150);
+    ctx.fillText("Rules of the game:", 450, 200);
+    ctx.fillText("Flappy Bird is you", 450, 250);
+    ctx.fillText("Press space to flap higher", 450, 300)
+    ctx.fillText("Avoid enemy birds and green pipes", 450, 350);
+    ctx.fillText("Yellow portals reverse gravity", 450, 400);
+    ctx.fillText("Press space to start", 450, 450);
+    preventquickstart();
+}
+
+startBtn.addEventListener("click", () => {
+    const name = usernameInput.value.trim();
+    if (name !== "") {
+        playerName = name;
+        document.getElementById("startMenu").style.display = "none";
+        startGame();
+    } else {
+        alert("Please enter a username");
+    }
+});
+
+function updateGame() {
+    if (gameOver) {
+        ending_sounds();
+        collisionSound.play();
+        death_scene();
+        preventquickstart();
+        return;
+    }
+
+    ctx.drawImage(images.backgroundImg, 0, 0, canvas.width, canvas.height);
+    updateBird();
+    createObstacles();
+    moveWalls();
+    drawWalls();
+    movePipes();
+    drawPipes();
+    movePortals();
+    drawPortals();
+    createEnemyBird();
+    moveEnemyBird();
+    drawEnemyBird();
+    drawBird();
+    drawBoundaries();
+
+    frame++;
+    score = Math.max(0, Math.floor((frame - 200) / 100));
+    ctx.fillText("Score: " + score, 150, 25);
+    ctx.fillText(playerName, 450, 25);
+    if (high_score < score) {
+        high_score = score;
+    }
+    ctx.fillText("High Score: " + high_score, 750, 25);
+    requestAnimationFrame(updateGame);
 }
 
 document.addEventListener("keydown", function(event) {
