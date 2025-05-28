@@ -256,11 +256,11 @@ function death_scene() {
         }
 
         ctx.drawImage(images.backgroundImg, 0, 0, canvas.width, canvas.height);
-        drawBoundaries();
         drawPipes();
         drawWalls();
         drawPortals();
         drawEnemyBird();
+        drawBoundaries();
         drawBird();
 
         ctx.fillText("Score: " + score, 100, 35);
