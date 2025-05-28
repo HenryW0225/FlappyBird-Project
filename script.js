@@ -402,7 +402,7 @@ document.addEventListener("keydown", function(event) {
 
 
 document.addEventListener("keydown", function(event) {
-    if (event.code === "a" && gameOver && playerName != "") {
+    if (event.code === "KeyA" && gameOver && playerName != "") {
         document.getElementById("gameContainer").style.display = "none";
         document.getElementById("gameLeaderboardPage").style.display = "block";
         fetch('/leaderboard')
