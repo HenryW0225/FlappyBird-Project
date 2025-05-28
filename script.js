@@ -385,7 +385,7 @@ document.addEventListener("keydown", function(event) {
         if (gameOver) {
             if (canStartGame && playerName != "") {
                 document.getElementById("gameContainer").style.display = "block";
-                document.getElementById("leaderboardPage").style.display = "none";
+                document.getElementById("gameLeaderboardPage").style.display = "none";
                 reset_positions();
                 gameOver = false;
                 canStartGame = false;
@@ -404,7 +404,7 @@ document.addEventListener("keydown", function(event) {
 document.addEventListener("keydown", function(event) {
     if (event.code === "a" && gameOver && playerName != "") {
         document.getElementById("gameContainer").style.display = "none";
-        document.getElementById("leaderboardPage").style.display = "block";
+        document.getElementById("gameLeaderboardPage").style.display = "block";
         fetch('/leaderboard')
         .then(res => res.json())
         .then(scores => {
