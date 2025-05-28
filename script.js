@@ -264,9 +264,9 @@ function death_scene() {
         ctx.fillText("Score: " + score, 100, 35);
         ctx.fillText(playerName, canvas.width / 2, 35);
         ctx.fillText("High Score: " + high_score, canvas.width - 100, 35);
-        ctx.fillText("Game Over!", 450, 400);
-        ctx.fillText("Press Space to Play Again!", 450, 450);
-        ctx.fillText("Press 'a' to view Leaderboard", 450, 500);
+        ctx.fillText("Game Over!", 450, 250);
+        ctx.fillText("Press Space to Play Again!", 450, 300);
+        ctx.fillText("Press 'a' to view Leaderboard", 450, 350);
 
         if (bird.y === boundaries.height || bird.y + bird.height === canvas.height - boundaries.height) {
             return;
