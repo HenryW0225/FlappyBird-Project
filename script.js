@@ -259,10 +259,11 @@ function death_scene() {
         drawWalls();
         drawPortals();
         drawEnemyBird();
+        drawBird();
 
-        ctx.fillText("Score: " + score, 150, 25);
-        ctx.fillText(playerName, 450, 25);
-        ctx.fillText("High Score: " + high_score, 750, 25);
+        ctx.fillText("Score: " + score, 100, 35);
+        ctx.fillText(playerName, 450, 35);
+        ctx.fillText("High Score: " + high_score, 800, 35);
 
         if (bird.y === boundaries.height || bird.y + bird.height === canvas.height - boundaries.height) {
             return;
@@ -350,12 +351,12 @@ function updateGame() {
 
     frame++;
     score = Math.max(0, Math.floor((frame - 200) / 100));
-    ctx.fillText("Score: " + score, 150, 25);
-    ctx.fillText(playerName, 450, 25);
+    ctx.fillText("Score: " + score, 100, 35);
+    ctx.fillText(playerName, 450, 35);
     if (high_score < score) {
         high_score = score;
     }
-    ctx.fillText("High Score: " + high_score, 750, 25);
+    ctx.fillText("High Score: " + high_score, 800, 35);
     requestAnimationFrame(updateGame);
 }
 
