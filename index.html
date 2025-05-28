@@ -12,7 +12,24 @@
         <input type="text" id="usernameInput" placeholder="Enter your username" />
         <button id="startBtn">Start Game</button>
     </div>
-    <canvas id="gameCanvas"></canvas>
+    <div id = "gameContainer">
+        <canvas id="gameCanvas"></canvas>
+    </div>
+    <div id = "gameLeaderboardPage" style="display:none;">
+        <h2>Leaderboard</h2>
+        <table id="gameLeaderboard">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+        <tbody>
+
+        </tbody>
+        </table>
+    </div>
     <script type="module" src="script.js"></script>
 </body>
 </html>

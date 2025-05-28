@@ -2,7 +2,7 @@
 
 A modern web-based recreation of the classic Flappy Bird game, built with JavaScript, HTML5 Canvas, and CSS. Features dynamic obstacles, gravity-reversing portals, sound effects, and enemy birds for added challenge.
 
-![Gameplay Screenshot](assets/screenshot.png) <!-- Optional: Add screenshot if available -->
+Try the exciting game out yourself at: henryw0225.github.io/FlappyBird-Project/
 
 ## 🎮 Features
 

@@ -2,25 +2,53 @@ body {
     text-align: center;
     background-color: skyblue;
     font-family: Arial, sans-serif;
-    
-    #startMenu {
-        position: absolute;
-        top: 200px;
-        left: 50%;
-        transform: translateX(-50%);
-        text-align: center;
-    }
-      
-    #usernameInput {
-        font-size: 20px;
-        padding: 10px;
-    }
-      
-    #startBtn {
-        margin-top: 10px;
-        font-size: 20px;
-        padding: 10px 20px;
-    }
+}
+
+#startMenu {
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+  
+#usernameInput {
+    font-size: 20px;
+    padding: 10px;
+}
+  
+#startBtn {
+    margin-top: 10px;
+    font-size: 20px;
+    padding: 10px 20px;
+}
+
+#gameLeaderboard {
+    margin: 30px auto;
+    border-collapse: collapse;
+    width: 80%;
+    max-width: 500px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#gameLeaderboard th, #leaderboard td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    font-size: 18px;
+}
+
+#gameLeaderboard th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#gameLeaderboard tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#gameLeaderboard tr:hover {
+    background-color: #f1f1f1;
 }
 
 canvas {

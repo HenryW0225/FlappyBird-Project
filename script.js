@@ -2,6 +2,8 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const startBtn = document.getElementById("startBtn");
 const usernameInput = document.getElementById("usernameInput");
+//const leaderboard = document.getElementById('gameLeaderboard');
+const leaderboardBody = document.querySelector('#gameLeaderboard tbody');
 let playerName = "";
 
 import * as images from './images.js';
@@ -188,7 +190,7 @@ function drawBird() {
 }
 
 function createEnemyBird() {
-    if (Math.random() < 0.07 && frame%10  === 0 && frame%100 >= 10 && frame%100 <= 70 && enemy_bird.length < 2) {
+    if (Math.random() < 0.16 && frame%10  === 0 && frame%100 >= 10 && frame%100 <= 70 && enemy_bird.length < 2) {
         let height = Math.random() * (canvas.height - 2*bird.height);
         enemy_bird.push({
             x: canvas.width,
@@ -317,6 +319,20 @@ function startGame() {
     preventquickstart();
 }
 
+function submitScore(FinalScore) {
+    if (!playerName) return;
+
+    fetch('/submit-score', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: playerName, score: FinalScore }),
+    })
+    .then(res => {
+        if (!res.ok) throw new Error('Failed to save score');
+        return res.text();
+    })
+}
+
 startBtn.addEventListener("click", () => {
     const name = usernameInput.value.trim();
     if (name !== "") {
@@ -330,6 +346,7 @@ startBtn.addEventListener("click", () => {
 
 function updateGame() {
     if (gameOver) {
+        submitScore(high_score);
         ending_sounds();
         collisionSound.play();
         death_scene();
@@ -367,6 +384,8 @@ document.addEventListener("keydown", function(event) {
     if (event.code === "Space") {
         if (gameOver) {
             if (canStartGame && playerName != "") {
+                document.getElementById("gameContainer").style.display = "block";
+                document.getElementById("leaderboardPage").style.display = "none";
                 reset_positions();
                 gameOver = false;
                 canStartGame = false;
@@ -380,6 +399,32 @@ document.addEventListener("keydown", function(event) {
         }
     }
 });
+
+
+document.addEventListener("keydown", function(event) {
+    if (event.code === "a" && gameOver && playerName != "") {
+        document.getElementById("gameContainer").style.display = "none";
+        document.getElementById("leaderboardPage").style.display = "block";
+        fetch('/leaderboard')
+        .then(res => res.json())
+        .then(scores => {
+            leaderboardBody.innerHTML = ''; 
+            scores.forEach((score, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${score.name}</td>
+                    <td>${score.score}</td>
+                `;
+                leaderboardBody.appendChild(tr);
+            });
+        })
+        .catch(err => {
+            console.error('Failed to load leaderboard', err);
+        });
+
+    }
+})
 
 
 
