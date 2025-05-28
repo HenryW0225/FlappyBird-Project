@@ -10,7 +10,7 @@ const backgroundSound = new Audio('sounds/background.wav');
 const collisionSound = new Audio('sounds/collision.wav');
 const portalSound = new Audio('sounds/portal.wav');
 
-canvas.width = 900;
+canvas.width = 980;
 canvas.height = 600;
 
 ctx.textAlign = "center";
@@ -100,10 +100,10 @@ function createObstacles() {
 
 function moveWalls() {
     for (let wall of walls) {
-        if (wall.y === 0) {
+        if (wall.y <= boundaries.height) {
             wall.trajectory = 1;
         }
-        if (wall.y + wall.height == 600) {
+        if (wall.y + wall.height >= canvas.height - boundaries.height) {
             wall.trajectory = -1;
         }
         wall.x -= 3;
@@ -188,7 +188,7 @@ function drawBird() {
 }
 
 function createEnemyBird() {
-    if (Math.random() < 0.06 && frame%4 === 0 && enemy_bird.length < 2) {
+    if (Math.random() < 0.07 && frame%10 > 0 && frames%10 < 8 && enemy_bird.length < 2) {
         let height = Math.random() * (canvas.height - 2*bird.height);
         enemy_bird.push({
             x: canvas.width,
@@ -262,8 +262,11 @@ function death_scene() {
         drawBird();
 
         ctx.fillText("Score: " + score, 100, 35);
-        ctx.fillText(playerName, 450, 35);
-        ctx.fillText("High Score: " + high_score, 800, 35);
+        ctx.fillText(playerName, canvas.width / 2, 35);
+        ctx.fillText("High Score: " + high_score, canvas.width - 100, 35);
+        ctx.fillText("Game Over!", 450, 400);
+        ctx.fillText("Press Space to Play Again!", 450, 450);
+        ctx.fillText("Press 'a' to view Leaderboard", 450, 500);
 
         if (bird.y === boundaries.height || bird.y + bird.height === canvas.height - boundaries.height) {
             return;
@@ -304,13 +307,13 @@ function playSound(audio) {
 }
 
 function startGame() {
-    ctx.fillText("Welcome to Flappy Bird!", 450, 150);
-    ctx.fillText("Rules of the game:", 450, 200);
-    ctx.fillText("Flappy Bird is you", 450, 250);
-    ctx.fillText("Press space to flap higher", 450, 300)
-    ctx.fillText("Avoid enemy birds and green pipes", 450, 350);
-    ctx.fillText("Yellow portals reverse gravity", 450, 400);
-    ctx.fillText("Press space to start", 450, 450);
+    ctx.fillText("Welcome to Flappy Bird!", canvas.width / 2, 150);
+    ctx.fillText("Rules of the game:", canvas.width / 2, 200);
+    ctx.fillText("Flappy Bird is you", canvas.width / 2, 250);
+    ctx.fillText("Press space to flap higher", canvas.width / 2, 300)
+    ctx.fillText("Avoid enemy birds and green pipes", canvas.width / 2, 350);
+    ctx.fillText("Yellow portals reverse gravity", canvas.width / 2, 400);
+    ctx.fillText("Press space to start", canvas.width / 2, 450);
     preventquickstart();
 }
 
@@ -352,11 +355,11 @@ function updateGame() {
     frame++;
     score = Math.max(0, Math.floor((frame - 200) / 100));
     ctx.fillText("Score: " + score, 100, 35);
-    ctx.fillText(playerName, 450, 35);
+    ctx.fillText(playerName, canvas.width / 2, 35);
     if (high_score < score) {
         high_score = score;
     }
-    ctx.fillText("High Score: " + high_score, 800, 35);
+    ctx.fillText("High Score: " + high_score, canvas.width - 100, 35);
     requestAnimationFrame(updateGame);
 }
 
