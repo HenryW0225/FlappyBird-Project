@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/HenryW0225/FlappyBird-Project#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^5.1.0"
   }
 }

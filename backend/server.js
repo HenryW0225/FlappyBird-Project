@@ -5,6 +5,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.static('public')); 
+const cors = require('cors');
+app.use(cors());
 
 const HIGHSCORE_FILE = 'highscores.json';
 
