@@ -371,7 +371,7 @@ function updateGame() {
     drawBoundaries();
 
     frame++;
-    score = Math.max(0, Math.floor((frame - 200) / 100));
+    score = Math.max(0, Math.floor((frame - 227) / 100));
     ctx.fillText("Score: " + score, 100, 35);
     ctx.fillText(playerName, canvas.width / 2, 35);
     if (high_score < score) {
