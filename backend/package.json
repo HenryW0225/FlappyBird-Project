@@ -2,7 +2,7 @@
   "name": "flappybird-project",
   "version": "1.0.0",
   "description": "A modern web-based recreation of the classic Flappy Bird game, built with JavaScript, HTML5 Canvas, and CSS. Features dynamic obstacles, gravity-reversing portals, sound effects, and enemy birds for added challenge.",
-  "main": "images.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
