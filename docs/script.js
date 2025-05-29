@@ -322,7 +322,7 @@ function startGame() {
 
 function submitScore(FinalScore) {
     if (playerName === "") return;
-    console.log("submitScore called with:", FinalScore);
+
     fetch(`${BACKEND_URL}/submit-score`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
