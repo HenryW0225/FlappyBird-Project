@@ -2,7 +2,6 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const startBtn = document.getElementById("startBtn");
 const usernameInput = document.getElementById("usernameInput");
-//const leaderboard = document.getElementById('gameLeaderboard');
 const leaderboardBody = document.querySelector('#gameLeaderboard tbody');
 let playerName = "";
 
