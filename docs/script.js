@@ -1,3 +1,5 @@
+const BACKEND_URL = 'https://flappybird-project.onrender.com'
+
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const startBtn = document.getElementById("startBtn");
@@ -321,7 +323,7 @@ function startGame() {
 function submitScore(FinalScore) {
     if (!playerName) return;
 
-    fetch('/submit-score', {
+    fetch(`${BACKEND_URL}/submit-score`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: playerName, score: FinalScore }),
@@ -404,7 +406,7 @@ document.addEventListener("keydown", function(event) {
     if (event.code === "KeyA" && gameOver && playerName != "") {
         document.getElementById("gameContainer").style.display = "none";
         document.getElementById("gameLeaderboardPage").style.display = "block";
-        fetch('/leaderboard')
+        fetch(`${BACKEND_URL}/leaderboard`)
         .then(res => res.json())
         .then(scores => {
             leaderboardBody.innerHTML = ''; 
