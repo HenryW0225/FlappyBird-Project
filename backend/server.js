@@ -10,6 +10,7 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SER
 
 app.post('/submit-score', async (req, res) => {
   const { name, score } = req.body;
+  console.log("submitScore called with1:", score);
   if (!name || typeof score !== 'number') {
     return res.status(400).json({ error: 'Invalid input' });
   }
@@ -22,7 +23,7 @@ app.post('/submit-score', async (req, res) => {
   if (fetchError && fetchError.code !== 'PGRST116') {
     return res.status(500).json({ error: fetchError.message });
   }
-
+  console.log("submitScore called with2:", score);
   if (!existing) {
     const { error: insertError } = await supabase
       .from('Leaderboard')
