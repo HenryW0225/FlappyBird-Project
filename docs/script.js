@@ -1,4 +1,4 @@
-const BACKEND_URL = 'https://flappybird-project.onrender.com'
+const BACKEND_URL = 'https://hw0225-flappybird-7zql.onrender.com'
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
