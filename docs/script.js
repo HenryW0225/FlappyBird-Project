@@ -326,7 +326,7 @@ function submitScore(FinalScore) {
     fetch(`${BACKEND_URL}/submit-score`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: playerName, score: FinalScore }),
+        body: JSON.stringify({ name: playerName, score: Number(FinalScore) }),
     })
     .then(res => {
         if (!res.ok) throw new Error('Failed to save score');
