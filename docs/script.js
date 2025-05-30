@@ -191,7 +191,7 @@ function drawBird() {
 }
 
 function createEnemyBird() {
-    if (Math.random() < 0.2 && frame%10  === 0 && frame%100 >= 10 && frame%100 <= 70 && enemy_bird.length < 2) {
+    if (Math.random() < 0.3 && frame%10  === 0 && (frame%100 >= 40 || frame%100 === 0) && enemy_bird.length < 2) {
         let height = Math.random() * (canvas.height - 2*bird.height);
         enemy_bird.push({
             x: canvas.width,
@@ -339,7 +339,7 @@ startBtn.addEventListener("click", () => {
     if (name !== "") {
         playerName = name;
         document.getElementById("startMenu").style.display = "none";
-        
+
         fetch(`${BACKEND_URL}/get-highscore?name=${encodeURIComponent(playerName)}`)
         .then(res => res.json())
         .then(playerhighscore => { 
