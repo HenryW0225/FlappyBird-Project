@@ -339,6 +339,16 @@ startBtn.addEventListener("click", () => {
     if (name !== "") {
         playerName = name;
         document.getElementById("startMenu").style.display = "none";
+        
+        fetch(`${BACKEND_URL}/get-highscore?name=${encodeURIComponent(playerName)}`)
+        .then(res => res.json())
+        .then(playerhighscore => { 
+            high_score = playerhighscore;
+        })
+        .catch(err => {
+            console.error('Failed to retrieve player high score', err);
+        });
+
         startGame();
     } else {
         alert("Please enter a username");

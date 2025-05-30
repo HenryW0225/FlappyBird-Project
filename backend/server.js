@@ -10,7 +10,6 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SER
 
 app.post('/submit-score', async (req, res) => {
   const { name, score } = req.body;
-  console.log("submitScore called with1:", score);
   if (!name || typeof score !== 'number') {
     return res.status(400).json({ error: 'Invalid input' });
   }
@@ -23,7 +22,7 @@ app.post('/submit-score', async (req, res) => {
   if (fetchError && fetchError.code !== 'PGRST116') {
     return res.status(500).json({ error: fetchError.message });
   }
-  console.log("submitScore called with2:", score);
+
   if (!existing) {
     const { error: insertError } = await supabase
       .from('Leaderboard')
@@ -53,6 +52,28 @@ app.get('/leaderboard', async (req, res) => {
   
     res.json(data);
   });
+
+app.get('/get-highscore', async (req, res) => {
+    const { name } = req.query;
+    if (!name) {
+        return res.status(400).json({ error: 'Invalid input' });
+    }
+    const { data: existing, error: fetchError } = await supabase
+        .from('Leaderboard')
+        .select('score')
+        .eq('name', name)
+        .single();
+
+    if (fetchError && fetchError.code !== 'PGRST116') {
+        return res.status(500).json({ error: fetchError.message });
+    }
+    if (existing) {
+        res.json(existing.score);
+    } 
+    else {
+        res.json(0);
+    }
+});
   
 
 const PORT = process.env.PORT || 3000;
