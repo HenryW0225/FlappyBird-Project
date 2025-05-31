@@ -23,7 +23,8 @@ A modern, web-based recreation of the classic Flappy Bird game — built using *
   - Live score tracking
   - Persistent high scores per player
 - 👤 **Custom player names** tied to their high scores
-- 🪦 **Game over screen** with retry button and leaderboard
+- 🪦 **Game over screen** with falling animation
+- 📊 🥇🥈🥉 **Leaderboard** with top 10 scores and players, easily accessible + live updating
 - ☁️ **Backend hosted on [Render](https://render.com)**, kept awake with Uptime Robot
 - 🗃️ **Leaderboard data stored in [Supabase](https://supabase.com)** for reliability
 
