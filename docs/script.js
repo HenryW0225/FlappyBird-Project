@@ -191,7 +191,7 @@ function drawBird() {
 }
 
 function createEnemyBird() {
-    if (Math.random() < 0.3 && frame%10  === 0 && (frame%100 >= 40 || frame%100 === 0) && enemy_bird.length < 2) {
+    if (Math.random() < 0.3 && frame%10  === 0 && frame%100 >= 50 && enemy_bird.length < 2) {
         let height = Math.random() * (canvas.height - 2*bird.height);
         enemy_bird.push({
             x: canvas.width,
