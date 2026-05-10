@@ -436,6 +436,7 @@ function startGameLoop() {
     gameOverHandled = false;
     if (!isLoopRunning) {
         isLoopRunning = true;
+        runGameTick();
         requestAnimationFrame(gameLoop);
     }
 }
