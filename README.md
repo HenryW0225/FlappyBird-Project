@@ -1,4 +1,4 @@
-# 🐦 Flappy Bird - Web Version
+# Flappy Bird - Web Version
 
 A modern, web-based recreation of the classic Flappy Bird game — built using **JavaScript**, **HTML5 Canvas**, and **CSS**. It features dynamic obstacles, custom graphics, sound effects; even gravity-reversing portals and enemy birds to crank up the challenge!
 
@@ -8,7 +8,7 @@ Note: Score tracking + leaderboard display is delayed ~1 minute at the start
 
 ---
 
-## 🚀 Features
+## Features
 
 - **Responsive controls** with realistic physics
 - **Dynamic obstacles**:
@@ -32,7 +32,7 @@ Note: Score tracking + leaderboard display is delayed ~1 minute at the start
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend**: HTML5, CSS3, JavaScript
 - **Backend**: Node.js + Express (hosted on Render)
@@ -52,7 +52,4 @@ Note: Score tracking + leaderboard display is delayed ~1 minute at the start
 ## Contact
 
 Email: hw363929@gmail.com
-
-GitHub: HenryW0225
-
 

@@ -22,8 +22,8 @@ ctx.fillStyle = "black";
 ctx.font = "30px Arial";
 
 
-let boundaries = { 
-    height: 20 
+let boundaries = {
+    height: 20
 };
 
 let bird = {
@@ -31,8 +31,8 @@ let bird = {
     y: 250,
     width: 30,
     height: 30,
-    gravity: 0.6,
-    lift: -10,
+    gravity: 0.6 * 60,
+    lift: -10 * 60,
     velocity: 0
 };
 
@@ -50,6 +50,18 @@ let canStartGame = false;
 let score = 0;
 let high_score = 0;
 
+let lastTimestamp = null;
+let elapsed = 0;
+let obstacleTimer = 0;
+let enemyTimer = 0;
+const spawnInterval = 100 / 60;
+const enemyCheckInterval = 10 / 60;
+const pipeSpeed = 3 * 60;
+const wallHorizontalSpeed = 3 * 60;
+const wallVerticalSpeed = 4 * 60;
+const enemyDefaultSpeed = 10 * 60;
+let deltaSeconds = 0;
+
 function isContacting(a, b) {
     return (
         a.x < b.x + b.width &&
@@ -60,7 +72,8 @@ function isContacting(a, b) {
 }
 
 function createObstacles() {
-    if (frame % 100 === 0) {
+    if (obstacleTimer >= spawnInterval) {
+        obstacleTimer %= spawnInterval;
         if (Math.random() < 0.15) {
             let height = 4 * Math.floor(Math.random() * (canvas.height / 6));
             let direction = Math.random() < 0.5 ? 1 : -1;
@@ -109,8 +122,8 @@ function moveWalls() {
         if (wall.y + wall.height >= canvas.height - boundaries.height) {
             wall.trajectory = -1;
         }
-        wall.x -= 3;
-        wall.y += 4 * wall.trajectory;
+        wall.x -= wallHorizontalSpeed * deltaSeconds;
+        wall.y += wallVerticalSpeed * wall.trajectory * deltaSeconds;
 
         if (isContacting(bird, wall)) {
             gameOver = true;
@@ -130,7 +143,7 @@ function drawWalls() {
 
 function movePipes() {
     for (let pipe of pipes) {
-        pipe.x -= 3;
+        pipe.x -= pipeSpeed * deltaSeconds;
 
         if (isContacting(bird, pipe)) {
             gameOver = true;
@@ -150,14 +163,14 @@ function drawPipes() {
 
 function movePortals() {
     for (let portal of portals) {
-        portal.x -= 3;
+        portal.x -= pipeSpeed * deltaSeconds;
 
         if (bird.x + bird.width > portal.x && portal.sound === 0) {
             portalSound.play();
             portal.sound = 1;
         }
 
-        if (bird.x + bird.width/2 > portal.x + portal.width/2 && portal.activation === 0) {
+        if (bird.x + bird.width / 2 > portal.x + portal.width / 2 && portal.activation === 0) {
             bird.lift = -bird.lift;
             bird.velocity = 0;
             bird.gravity = -bird.gravity;
@@ -177,35 +190,37 @@ function drawPortals() {
 }
 
 function updateBird() {
-    bird.velocity += bird.gravity;
-    bird.y += bird.velocity;
-} 
+    bird.velocity += bird.gravity * deltaSeconds;
+    bird.y += bird.velocity * deltaSeconds;
+}
 
 function drawBird() {
-    if (bird.gravity === 0.6) {
+    if (bird.gravity > 0) {
         ctx.drawImage(images.birdImg, bird.x, bird.y, bird.width, bird.height);
-    }
-    else {
+    } else {
         ctx.drawImage(images.upsidedownbirdImg, bird.x, bird.y, bird.width, bird.height);
     }
 }
 
 function createEnemyBird() {
-    if (Math.random() < 0.3 && frame%10  === 0 && frame%100 >= 50 && enemy_bird.length < 2) {
-        let height = Math.random() * (canvas.height - 2*bird.height);
-        enemy_bird.push({
-            x: canvas.width,
-            y: height,
-            width: 3*bird.width,
-            height: 2*bird.height,
-            velocity: 10
-        });
+    if (enemyTimer >= enemyCheckInterval) {
+        enemyTimer %= enemyCheckInterval;
+        if (Math.random() < 0.3 && obstacleTimer >= spawnInterval / 2 && enemy_bird.length < 2) {
+            let height = Math.random() * (canvas.height - 2 * bird.height);
+            enemy_bird.push({
+                x: canvas.width,
+                y: height,
+                width: 3 * bird.width,
+                height: 2 * bird.height,
+                velocity: enemyDefaultSpeed
+            });
+        }
     }
 }
 
 function moveEnemyBird() {
     for (let enemy of enemy_bird) {
-        enemy.x -= enemy.velocity;
+        enemy.x -= enemy.velocity * deltaSeconds;
 
         if (isContacting(bird, enemy)) {
             gameOver = true;
@@ -248,7 +263,8 @@ function ending_sounds() {
 
 function death_scene() {
     function fall() {
-        bird.y += bird.gravity * 30;
+        // simple fall animation after death (small constant step)
+        bird.y += 5 * (bird.gravity > 0 ? 1 : -1);
         if (bird.y < boundaries.height) {
             bird.y = boundaries.height;
         }
@@ -283,13 +299,13 @@ function death_scene() {
 
 function reset_positions() {
     bird.x = 50,
-    bird.y = 250,
-    bird.width = 30,
-    bird.height = 30,
-    bird.gravity = 0.6,
-    bird.lift = -10,
-    bird.velocity = 0
-    
+        bird.y = 250,
+        bird.width = 30,
+        bird.height = 30,
+        bird.gravity = 0.6 * 60,
+        bird.lift = -10 * 60,
+        bird.velocity = 0
+
     portals.length = 0;
     enemy_bird.length = 0;
     pipes.length = 0;
@@ -328,12 +344,12 @@ function submitScore(FinalScore) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: playerName, score: Number(FinalScore) }),
     })
-    .then(res => {
-        if (!res.ok) throw new Error('Failed to save score');
-        return res.text();
-    })
+        .then(res => {
+            if (!res.ok) throw new Error('Failed to save score');
+            return res.text();
+        })
 }
- 
+
 startBtn.addEventListener("click", () => {
     const name = usernameInput.value.trim();
     if (name !== "") {
@@ -341,13 +357,13 @@ startBtn.addEventListener("click", () => {
         document.getElementById("startMenu").style.display = "none";
 
         fetch(`${BACKEND_URL}/get-highscore?name=${encodeURIComponent(playerName)}`)
-        .then(res => res.json())
-        .then(playerhighscore => { 
-            high_score = playerhighscore;
-        })
-        .catch(err => {
-            console.error('Failed to retrieve player high score', err);
-        });
+            .then(res => res.json())
+            .then(playerhighscore => {
+                high_score = playerhighscore;
+            })
+            .catch(err => {
+                console.error('Failed to retrieve player high score', err);
+            });
 
         startGame();
     } else {
@@ -355,7 +371,16 @@ startBtn.addEventListener("click", () => {
     }
 });
 
-function updateGame() {
+function updateGame(timestamp) {
+    if (!lastTimestamp) lastTimestamp = timestamp || performance.now();
+    const now = timestamp || performance.now();
+    deltaSeconds = (now - lastTimestamp) / 1000;
+    lastTimestamp = now;
+
+    elapsed += deltaSeconds;
+    obstacleTimer += deltaSeconds;
+    enemyTimer += deltaSeconds;
+
     if (gameOver) {
         submitScore(high_score);
         ending_sounds();
@@ -380,8 +405,8 @@ function updateGame() {
     drawBird();
     drawBoundaries();
 
-    frame++;
-    score = Math.max(0, Math.floor((frame - 227) / 100));
+    // update score based on elapsed time (maps to original frame-based formula)
+    score = Math.max(0, Math.floor((elapsed - (227 / 60)) / spawnInterval));
     ctx.fillText("Score: " + score, 100, 35);
     ctx.fillText(playerName, canvas.width / 2, 35);
     if (high_score < score) {
@@ -391,7 +416,7 @@ function updateGame() {
     requestAnimationFrame(updateGame);
 }
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener("keydown", function (event) {
     if (event.code === "Space") {
         if (gameOver) {
             if (canStartGame && playerName != "") {
@@ -401,7 +426,7 @@ document.addEventListener("keydown", function(event) {
                 gameOver = false;
                 canStartGame = false;
                 backgroundMusic();
-                updateGame();
+                requestAnimationFrame(updateGame);
             }
         }
         else {
@@ -412,31 +437,31 @@ document.addEventListener("keydown", function(event) {
 });
 
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener("keydown", function (event) {
     if (event.code === "KeyA" && gameOver && playerName != "") {
         document.getElementById("gameContainer").style.display = "none";
         document.getElementById("gameLeaderboardPage").style.display = "block";
         fetch(`${BACKEND_URL}/leaderboard`)
-        .then(res => res.json())
-        .then(scores => {
-            leaderboardBody.innerHTML = ''; 
-            scores.forEach((score, index) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
+            .then(res => res.json())
+            .then(scores => {
+                leaderboardBody.innerHTML = '';
+                scores.forEach((score, index) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${score.name}</td>
                     <td>${score.score}</td>
                 `;
-                leaderboardBody.appendChild(tr);
+                    leaderboardBody.appendChild(tr);
+                });
+            })
+            .catch(err => {
+                console.error('Failed to load leaderboard', err);
             });
-        })
-        .catch(err => {
-            console.error('Failed to load leaderboard', err);
-        });
 
     }
 })
- 
+
 
 
 
