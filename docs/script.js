@@ -195,7 +195,7 @@ function drawBird() {
         ctx.drawImage(images.birdImg, bird.x, bird.y, bird.width, bird.height);
     }
     else {
-        ctx.rotate(max(30, min(-30, bird.velocity * 5)) * -Math.PI / 180);
+        ctx.rotate((2 - max(30, min(-30, bird.velocity * 5))) * Math.PI / 180);
         ctx.drawImage(images.upsidedownbirdImg, bird.x, bird.y, bird.width, bird.height);
     }
     ctx.restore();
