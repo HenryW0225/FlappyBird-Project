@@ -190,11 +190,10 @@ function updateBird() {
 function drawBird() {
     const tilt = Math.max(-30, Math.min(30, bird.velocity * 3)) * Math.PI / 180;
     const birdImage = bird.gravity > 0 ? images.birdImg : images.upsidedownbirdImg;
-    const rotation = bird.gravity > 0 ? tilt : -tilt;
 
     ctx.save();
     ctx.translate(bird.x + bird.width / 2, bird.y + bird.height / 2);
-    ctx.rotate(rotation);
+    ctx.rotate(tilt);
     ctx.drawImage(birdImage, -bird.width / 2, -bird.height / 2, bird.width, bird.height);
     ctx.restore();
 }
