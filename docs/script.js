@@ -188,16 +188,14 @@ function updateBird() {
 }
 
 function drawBird() {
+    const tilt = Math.max(-30, Math.min(30, bird.velocity * 5)) * Math.PI / 180;
+    const birdImage = bird.gravity > 0 ? images.birdImg : images.upsidedownbirdImg;
+    const rotation = bird.gravity > 0 ? tilt : tilt + Math.PI;
 
     ctx.save();
-    if (bird.gravity > 0) {
-        ctx.rotate(max(30, min(-30, bird.velocity * 5)) * Math.PI / 180);
-        ctx.drawImage(images.birdImg, bird.x, bird.y, bird.width, bird.height);
-    }
-    else {
-        ctx.rotate((2 - max(30, min(-30, bird.velocity * 5))) * Math.PI / 180);
-        ctx.drawImage(images.upsidedownbirdImg, bird.x, bird.y, bird.width, bird.height);
-    }
+    ctx.translate(bird.x + bird.width / 2, bird.y + bird.height / 2);
+    ctx.rotate(rotation);
+    ctx.drawImage(birdImage, -bird.width / 2, -bird.height / 2, bird.width, bird.height);
     ctx.restore();
 }
 
